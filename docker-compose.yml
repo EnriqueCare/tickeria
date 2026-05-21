@@ -1,0 +1,19 @@
+
+services:
+  # El motor de base de datos de Tickeria
+  database:
+    image: mysql:8.0
+    container_name: tickeria_db_container
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: tickeria_db
+      MYSQL_USER: tickeria_user
+      MYSQL_PASSWORD: tickeria_password
+    ports:
+      - "3307:3306"          # Mapea el puerto de Docker al de tu PC
+    volumes:
+      - mysql_tickeria_data:/var/lib/mysql
+    restart: always
+
+volumes:
+  mysql_tickeria_data:       # Esto hace que tus tickets no se borren al apagar Docker
