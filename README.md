@@ -1,31 +1,50 @@
-# # 🎫 Tickeria - Sistema de Gestión de Tickets 
+# 🎫 Tickeria - Sistema de Gestión de Tickets (Tablero Kanban Full-Stack)
 
-Tickeria es una aplicación Full Stack diseñada para gestionar flujos de trabajo mediante un tablero Kanban dinámico. Permite la creación de tickets clasificados por prioridad y cliente, así como su movimiento interactivo entre diferentes estados físicos de progreso.
+Tickeria es una aplicación Full Stack de nivel profesional diseñada para gestionar flujos de trabajo eficientemente mediante un tablero Kanban dinámico. Permite la creación, organización y arrastre interactivo de tickets clasificados por prioridad, cliente y estado físico de progreso.
 
-## 🛠️ Arquitectura y Tecnologías
-
-El proyecto está dividido en un ecosistema de tres capas:
-
-1. **Base de Datos (Almacenamiento)**: MySQL 8.0 corriendo en un contenedor aislado de **Docker**.
-2. **Backend (Cerebro)**: **Java 21** con **Spring Boot 4.x** e Hibernate/Spring Data JPA para la persistencia segura.
-3. **Frontend (Interfaz)**: **Vue 3** (Composition API) administrado con **Vite**, estilizado con **Tailwind CSS** y conectado mediante **Axios**.
+Esta versión destaca porque **todo el ecosistema está completamente automatizado y contenedorizado con Docker**. Esto permite levantar el proyecto completo (Base de Datos, Backend y Frontend) con **un solo comando**, sin necesidad de instalar dependencias locales como Java, Node.js o MySQL de forma nativa en tu sistema operativo.
 
 ---
 
-## 🚀 Guía de Encendido Rápido
+## 🛠️ Arquitectura y Tecnologías
 
-Para levantar todo el ecosistema localmente, ejecuta los siguientes comandos en orden:
+El proyecto se organiza en una arquitectura aislada de tres capas orquestadas mediante **Docker Compose**:
 
-### 1. Base de Datos (Docker)
-Entra a la raíz del proyecto y arranca el contenedor en segundo plano:
-```bash
-docker compose up -d
+| Capa | Tecnología Principal | Descripción | Puerto Interno | Puerto Externo (PC) |
+| :--- | :--- | :--- | :---: | :---: |
+| **Frontend** | Vue 3 (Composition API) + Vite + Tailwind CSS + Axios | Interfaz de usuario responsiva, animada y fluida para el tablero Kanban. | `5173` | `5173` |
+| **Backend** | Java 21 + Spring Boot 3.x + Hibernate / Spring Data JPA | API REST robusta encargada de la lógica de negocio y mapeo relacional (ORM). | `8080` | `8080` |
+| **Base de Datos** | MySQL 8.0 | Almacenamiento persistente de tickets mediante volúmenes aislados. | `3306` | `3307` |
 
-2. Backend (Java Spring Boot)
-Abre el proyecto en tu IDE (VS Code), navega hasta TickeriaBackendApplication.java y ejecuta el modo Run o Debug.
-La API REST estará escuchando de forma segura en http://localhost:8080.
+---
 
-3. Frontend (Vue.js)
-Abre una terminal nueva, muévete a la carpeta de la interfaz e inicia el servidor de desarrollo de Vite:
-cd tickeria-frontend
-npm run dev
+## 📋 Prerrequisitos
+
+Para ejecutar este proyecto de forma global solo necesitas tener instalado en tu máquina:
+* **Git** (para clonar el repositorio)
+* **Docker Desktop** (que incluye Docker Compose) en ejecución.
+
+---
+### 1. Clonar el repositorio
+2. Levantar el ecosistema con Docker
+Asegúrate de estar en la carpeta raíz del proyecto (donde se encuentra el archivo docker-compose.yml) y ejecuta:
+
+docker compose up -d --build
+
+Una vez que el proceso de Docker finalice con éxito, podrás acceder a los siguientes componentes desde tu computadora:
+
+💻 Interfaz de Usuario (Frontend): Entra a http://localhost:5173 en tu navegador para interactuar con el tablero Kanban.
+
+⚙️ API REST (Backend): Verifica que los endpoints respondan correctamente visitando http://localhost:8080/api/tickets.
+
+🗄️ Base de Datos (MySQL): Si usas un gestor externo (como Navicat o DBeaver), conéctate usando:
+
+Host: localhost
+
+Puerto: 3307
+
+Usuario: tickeria_user
+
+Contraseña: tickeria_password
+
+Base de datos: tickeria_db
