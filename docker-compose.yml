@@ -1,6 +1,7 @@
+version: '3.8'
 
 services:
-  # El motor de base de datos de Tickeria
+  # 1. Base de datos de Tickeria 
   database:
     image: mysql:8.0
     container_name: tickeria_db_container
@@ -10,10 +11,42 @@ services:
       MYSQL_USER: tickeria_user
       MYSQL_PASSWORD: tickeria_password
     ports:
-      - "3307:3306"          # Mapea el puerto de Docker al de tu PC
+      - "3307:3306"          # Puerto 3307 externo para tu Navicat/DBeaver, 3306 interno mas que nada para evitar errores si se tiene mysql en la p
     volumes:
       - mysql_tickeria_data:/var/lib/mysql
     restart: always
+    networks:
+      - tickeria-network
 
+  # 2. Servicio del Backend (Spring Boot)
+  backend:
+    build: ./tickeria-backend
+    container_name: tickeria_backend_container
+    ports:
+      - "8080:8080"
+    depends_on:
+      - database             # Espera a que el servicio database inicie
+    restart: always
+    networks:
+      - tickeria-network
+
+  # 3. Servicio del Frontend (Vue.js)
+  frontend:
+    build: ./tickeria-frontend
+    container_name: tickeria_frontend_container
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend             # Espera a que el backend esté listo
+    restart: always
+    networks:
+      - tickeria-network
+
+# Se mantiene el volumen original para NO perder los datos actuales
 volumes:
-  mysql_tickeria_data:       # Esto hace que tus tickets no se borren al apagar Docker
+  mysql_tickeria_data:
+
+# Red interna para que se comuniquen usando sus nombres de servicio
+networks:
+  tickeria-network:
+    driver: bridge
